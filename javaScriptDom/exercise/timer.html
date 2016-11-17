@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Timer</title>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"
+            integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
+            crossorigin="anonymous"></script>
+    <style>
+        #timer {
+            font-size: 5em;
+        }
+    </style>
+</head>
+<body>
+<div id="timer">
+    <span id="hours" class="timer">00</span>:
+    <span id="minutes" class="timer">00</span>:
+    <span id="seconds" class="timer">00</span>
+    <button id="start-timer">Start</button>
+    <button id="stop-timer">Stop</button>
+</div>
+<script>
+    window.onload=function(){
+        timer();
+    };
+
+    function timer() {
+        $("#start-timer").on('click', startTime);
+        $("#stop-timer").on('click', stopTime);
+
+        let seconds;
+
+        function startTime() {
+            $("#seconds").text("00");
+            $("#minutes").text("00");
+            $("#hours").text("00");
+
+            seconds = setInterval(increaseSeconds, 1000);
+
+            $("#start-timer").attr("disabled", true);
+            $("#stop-timer").attr("disabled", false);
+
+            function increaseSeconds() {
+                let seconds = Number($("#seconds").text());
+
+                if(seconds < 59) {
+                    seconds++;
+                } else {
+                    increaseMinutes();
+                    seconds = 0;
+                }
+
+                $("#seconds").text(seconds.pad());
+            }
+
+            function increaseMinutes() {
+                let minutes = Number($("#minutes").text());
+
+                if(minutes < 59) {
+                    minutes++;
+                } else {
+                    increaseHours();
+                    minutes = 0;
+                }
+
+                $("#minutes").text(minutes.pad());
+            }
+
+            function increaseHours() {
+                let hours = Number($("#hours").text());
+
+                if(hours < 59) {
+                    hours++;
+                } else {
+                    hours = 0;
+                }
+
+                $("#hours").text(hours.pad());
+            }
+
+        }
+
+        function stopTime() {
+            clearInterval(seconds);
+            seconds = null;
+            $("#stop-timer").attr("disabled", true);
+            $("#start-timer").attr("disabled", false);
+    }
+
+        Number.prototype.pad = function(size) {
+            var s = String(this);
+            while (s.length < (size || 2)) {s = "0" + s;}
+            return s;
+        }
+    }
+</script>
+</body>
+</html>
